@@ -18,11 +18,11 @@ module tt_um_example (
 wire key_mode;
 wire key_add;
 wire[6:0] segment;
-wire[3:0] byte;
+	wire[3:0] bytee;
 assign  key_mode=ui_in[0];
     assign  key_add=ui_in[1];
 assign  uo_out=segment;
-assign  uio_out=byte;
+assign  uio_out=bytee;
 reg [5:0]second;
 reg [5:0]minute;
 reg [4:0]hour;
@@ -109,7 +109,7 @@ end
 reg [11:0]data_show;
 reg [3:0]segment_status;
 
-segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.byte(byte),.segment(segment),.byte_status(clock_counter[15:13]));
+	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.byte(bytee),.segment(segment),.byte_status(clock_counter[15:13]));
 wire key_mode_down,key_add_down;
 wire key_add_negedge;
 reg [2:0]status;
