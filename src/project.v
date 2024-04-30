@@ -29,6 +29,7 @@ assign  uo_out=segment;
 assign  uio_out=bytee;
 assign reset=rst_n;
 assign clock=clk;
+	assign uio_oe=0;
 reg [5:0]second;
 reg [5:0]minute;
 reg [4:0]hour;
