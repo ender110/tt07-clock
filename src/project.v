@@ -25,8 +25,8 @@ wire[6:0] segment;
 	wire[3:0] bytee;
 assign  key_mode=ui_in[0];
     assign  key_add=ui_in[1];
-assign  uo_out=segment;
-assign  uio_out=bytee;
+	assign  uo_out={1'b1,segment};
+	assign  uio_out={4'hf,bytee};
 assign reset=rst_n;
 assign clock=clk;
 	assign uio_oe=0;
@@ -131,9 +131,9 @@ parameter status_show_stop=6;
 always @(posedge clock )
 begin
 	case(status)
-		status_show_time:data_show<={hour,minute};
+		status_show_time:data_show<={1'b0,hour,minute};
 		status_show_minute:data_show<={6'd25,minute};
-		status_show_hour:data_show<={hour,6'd25};
+		status_show_hour:data_show<={1'b0,hour,6'd25};
 		default:data_show<=12'hxxx;
 	endcase
 end
