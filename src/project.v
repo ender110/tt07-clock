@@ -109,7 +109,7 @@ end
 reg [11:0]data_show;
 reg [3:0]segment_status;
 
-	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.byte(bytee),.segment(segment),.byte_status(clock_counter[15:13]));
+	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.bytee(bytee),.segment(segment),.byte_status(clock_counter[15:13]));
 wire key_mode_down,key_add_down;
 wire key_add_negedge;
 reg [2:0]status;
