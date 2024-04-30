@@ -1,13 +1,13 @@
 module segment_show(input clock,input reset,input [11:0]data_show,
 input [2:0]byte_status,
-output [3:0]byte,output[6:0]segment);
+		    output [3:0]bytee,output[6:0]segment);
 
 //reg[15:0]bit_status;
 //always @(posedge clock or negedge reset)
 //begin
 //	if(!reset)
 //	begin
-//		bit_status<=0;
+//		bit_status<=0;1
 //	end
 //	else
 //	begin
