@@ -15,14 +15,18 @@ module tt_um_example (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
+	wire clock ;
 wire key_mode;
 wire key_add;
+	wire reset;
 wire[6:0] segment;
 	wire[3:0] bytee;
 assign  key_mode=ui_in[0];
     assign  key_add=ui_in[1];
 assign  uo_out=segment;
 assign  uio_out=bytee;
+	assign reset=rst_n;
+	assign clock=clk;
 reg [5:0]second;
 reg [5:0]minute;
 reg [4:0]hour;
