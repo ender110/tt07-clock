@@ -38,7 +38,7 @@ begin
 end
 //wire [2:0]byte_status;
 //assign byte_status=bit_status[2:0];
-assign byte=byte_status==0?4'b0001:byte_status==1?4'b0000:byte_status==2?4'b0010:byte_status==3?4'b0000:byte_status==4?4'b0100:byte_status==5?4'b0000:byte_status==6?4'b1000:4'b0000;
+assign bytee=byte_status==0?4'b0001:byte_status==1?4'b0000:byte_status==2?4'b0010:byte_status==3?4'b0000:byte_status==4?4'b0100:byte_status==5?4'b0000:byte_status==6?4'b1000:4'b0000;
 //wire	[3:0]	low_ones,low_tens; 
 //assign low_ones = data_show[5:0] % 10;
 //assign low_tens = data_show[5:0]  / 10;
