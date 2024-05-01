@@ -38,14 +38,14 @@ input [2:0]byte_status,
 // end
 //wire [2:0]byte_status;
 //assign byte_status=bit_status[2:0];
-assign bytee=byte_status==0?4'b0001:byte_status==1?4'b0000:byte_status==2?4'b0010:byte_status==3?4'b0000:byte_status==4?4'b0100:byte_status==5?4'b0000:byte_status==6?4'b1000:4'b0000;
+//assign bytee=byte_status==0?4'b0001:byte_status==1?4'b0000:byte_status==2?4'b0010:byte_status==3?4'b0000:byte_status==4?4'b0100:byte_status==5?4'b0000:byte_status==6?4'b1000:4'b0000;
 //wire	[3:0]	low_ones,low_tens; 
 //assign low_ones = data_show[5:0] % 10;
 //assign low_tens = data_show[5:0]  / 10;
 //wire	[3:0]	high_ones,high_tens; 
 //assign high_ones = data_show[11:6] % 10;
 //assign high_tens = data_show[11:6]  / 10;
-reg [5:0]data_showing;
+//reg [5:0]data_showing;
 // always@(*)
 // begin
 // case(byte_status)
@@ -59,8 +59,8 @@ reg [5:0]data_showing;
 // 7:data_showing<=data_show[11:6];
 // endcase
 // end
-	assign data_showing=byte_status==1?data_show[5:0]:byte_status==3?data_show[5:0]:byte_status==5?data_show[5:0]:byte_status==7?data_show[11:6]:0;
-wire segment_show;
+// 	assign data_showing=byte_status==1?data_show[5:0]:byte_status==3?data_show[5:0]:byte_status==5?data_show[5:0]:byte_status==7?data_show[11:6]:0;
+// wire segment_show;
 // always@(*)
 // begin
 // case(byte_status)
@@ -74,7 +74,7 @@ wire segment_show;
 // 7:segment_show<=data_showing/10;
 // endcase
 // end
-assign segment_show=byte_status==1?data_showing%10:byte_status==3?data_showing/10:byte_status==5?data_showing%10:byte_status==7?data_showing/10:0;
-assign segment=segment_show;
+// assign segment_show=byte_status==1?data_showing%10:byte_status==3?data_showing/10:byte_status==5?data_showing%10:byte_status==7?data_showing/10:0;
+// assign segment=segment_show;
 //assign segment=byte_status==0?segment_table[low_ones]:byte_status==1?4'b0000:byte_status==2?segment_table[low_tens]:byte_status==3?4'b0000:byte_status==4?segment_table[high_ones]:byte_status==5?4'b0000:byte_status==6?segment_table[high_tens]:4'b0000;
 endmodule
