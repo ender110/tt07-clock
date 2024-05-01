@@ -46,19 +46,19 @@ assign bytee=byte_status==0?4'b0001:byte_status==1?4'b0000:byte_status==2?4'b001
 //assign high_ones = data_show[11:6] % 10;
 //assign high_tens = data_show[11:6]  / 10;
 reg [5:0]data_showing;
-always@(*)
-begin
-case(byte_status)
-0:data_showing<=0;
-1:data_showing<=data_show[5:0];
-2:data_showing<=0;
-3:data_showing<=data_show[5:0];
-4:data_showing<=0;
-5:data_showing<=data_show[5:0];
-6:data_showing<=0;
-7:data_showing<=data_show[11:6];
-endcase
-end
+// always@(*)
+// begin
+// case(byte_status)
+// 0:data_showing<=0;
+// 1:data_showing<=data_show[5:0];
+// 2:data_showing<=0;
+// 3:data_showing<=data_show[5:0];
+// 4:data_showing<=0;
+// 5:data_showing<=data_show[5:0];
+// 6:data_showing<=0;
+// 7:data_showing<=data_show[11:6];
+// endcase
+// end
 	assign data_showing=byte_status==1?data_show[5:0]:byte_status==3?data_show[5:0]:byte_status==5?data_show[5:0]:byte_status==7?data_show[11:6]:0;
 wire segment_show;
 // always@(*)
