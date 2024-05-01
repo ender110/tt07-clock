@@ -14,28 +14,28 @@ input [2:0]byte_status,
 //		bit_status<=bit_status+1;
 //	end
 //end
-reg [6:0]segment_table[9:0];
-always @(posedge clock or negedge reset)
-begin
-	if(!reset)
-	begin
-		segment_table[0]<=0;
-		segment_table[1]<=1;
-		segment_table[2]<=3;
-		segment_table[3]<=5;
-		segment_table[4]<=12;
-		segment_table[5]<=23;
-		segment_table[6]<=10;
-		segment_table[7]<=50;
-		segment_table[8]<=40;
-		segment_table[9]<=55;
-	end
-	else
-	begin
+// reg [6:0]segment_table[9:0];
+// always @(posedge clock or negedge reset)
+// begin
+// 	if(!reset)
+// 	begin
+// 		segment_table[0]<=0;
+// 		segment_table[1]<=1;
+// 		segment_table[2]<=3;
+// 		segment_table[3]<=5;
+// 		segment_table[4]<=12;
+// 		segment_table[5]<=23;
+// 		segment_table[6]<=10;
+// 		segment_table[7]<=50;
+// 		segment_table[8]<=40;
+// 		segment_table[9]<=55;
+// 	end
+// 	else
+// 	begin
 	
-	end
+// 	end
 
-end
+// end
 //wire [2:0]byte_status;
 //assign byte_status=bit_status[2:0];
 assign bytee=byte_status==0?4'b0001:byte_status==1?4'b0000:byte_status==2?4'b0010:byte_status==3?4'b0000:byte_status==4?4'b0100:byte_status==5?4'b0000:byte_status==6?4'b1000:4'b0000;
@@ -54,25 +54,27 @@ case(byte_status)
 2:data_showing<=0;
 3:data_showing<=data_show[5:0];
 4:data_showing<=0;
-5:data_showing<=data_show[11:6];
+5:data_showing<=data_show[5:0];
 6:data_showing<=0;
 7:data_showing<=data_show[11:6];
 endcase
 end
-reg[6:0]segment_show;
-always@(*)
-begin
-case(byte_status)
-0:segment_show<=0;
-1:segment_show<=data_showing%10;
-2:segment_show<=0;
-3:segment_show<=data_showing/10;
-4:segment_show<=0;
-5:segment_show<=data_showing%10;
-6:segment_show<=0;
-7:segment_show<=data_showing/10;
-endcase
-end
+	assign data_showing=byte_status==1?data_show[5:0]:byte_status==3?data_show[5:0]:byte_status==5?data_show[5:0]:byte_status==7?data_show[11:6]:0;
+wire segment_show;
+// always@(*)
+// begin
+// case(byte_status)
+// 0:segment_show<=0;
+// 1:segment_show<=data_showing%10;
+// 2:segment_show<=0;
+// 3:segment_show<=data_showing/10;
+// 4:segment_show<=0;
+// 5:segment_show<=data_showing%10;
+// 6:segment_show<=0;
+// 7:segment_show<=data_showing/10;
+// endcase
+// end
+assign segment_show=byte_status==1?data_showing%10:byte_status==3:data_showing/10byte_status==5?data_showing%10:byte_status==7?data_showing/10:0;
 assign segment=segment_show;
 //assign segment=byte_status==0?segment_table[low_ones]:byte_status==1?4'b0000:byte_status==2?segment_table[low_tens]:byte_status==3?4'b0000:byte_status==4?segment_table[high_ones]:byte_status==5?4'b0000:byte_status==6?segment_table[high_tens]:4'b0000;
 endmodule
