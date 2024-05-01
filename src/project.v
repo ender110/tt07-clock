@@ -19,7 +19,7 @@ module tt_um_example (
 );
 
 	assign uio_out=uio_in+ui_in+{7'd0,ena};
-assign uio_oe=uio_in;
+	assign uio_oe[7:4]=uio_in[7:4]+uio_in[3:0];
 wire reset;
 wire clock ;
 assign clock=clk;
@@ -64,5 +64,5 @@ begin
 	end
 end
 	assign uo_out[7]=clk;
-	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(12'h123),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]));
+	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(12'h123),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_out[3:0]));
 endmodule
