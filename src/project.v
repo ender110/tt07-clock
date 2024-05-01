@@ -121,12 +121,12 @@ wire key_mode_down,key_add_down;
 wire key_add_negedge;
 reg [2:0]status;
 parameter status_show_time=3'd0;
-parameter status_show_time_date=3'd1;
-parameter status_show_minute=3'd2;
-parameter status_show_hour=3'd3;
-parameter status_show_day=3'd4;
-parameter status_show_month=3'd5;
-parameter status_show_stop=3'd6;
+// parameter status_show_time_date=3'd1;
+// parameter status_show_minute=3'd2;
+// parameter status_show_hour=3'd3;
+// parameter status_show_day=3'd4;
+// parameter status_show_month=3'd5;
+// parameter status_show_stop=3'd6;
 //assign data_show=status==status_show_time?{hour,minute}:0;
 always @(posedge clock )
 begin
