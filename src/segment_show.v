@@ -74,7 +74,7 @@ wire segment_show;
 // 7:segment_show<=data_showing/10;
 // endcase
 // end
-assign segment_show=byte_status==1?data_showing%10:byte_status==3:data_showing/10:byte_status==5?data_showing%10:byte_status==7?data_showing/10:0;
+assign segment_show=byte_status==1?data_showing%10:byte_status==3?data_showing/10:byte_status==5?data_showing%10:byte_status==7?data_showing/10:0;
 assign segment=segment_show;
 //assign segment=byte_status==0?segment_table[low_ones]:byte_status==1?4'b0000:byte_status==2?segment_table[low_tens]:byte_status==3?4'b0000:byte_status==4?segment_table[high_ones]:byte_status==5?4'b0000:byte_status==6?segment_table[high_tens]:4'b0000;
 endmodule
