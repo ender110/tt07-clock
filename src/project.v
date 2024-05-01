@@ -63,6 +63,27 @@ begin
 		end
 	end
 end
+//minutes
+	assign minute_flag=second_flag&&(second==6'd59)&&clock_run_flag;
+	always @(posedge clock or negedge reset)
+begin
+	if(!reset)
+	begin
+		minute<=0;
+	end
+	else
+	begin
+		if(minute_flag)
+		begin
+			minute<=minute+1;
+			if(minute==59)
+			begin
+				minute<=0;
+			end
+		end
+
+	end
+end
 	assign uo_out[7]=clk;
 	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(12'h123),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
 endmodule
