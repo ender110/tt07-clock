@@ -63,5 +63,5 @@ begin
 		end
 	end
 end
-	assign uo_out={1'b0,second[6:0]};
+	assign uo_out={1'b0,second[5:0]};
 endmodule
