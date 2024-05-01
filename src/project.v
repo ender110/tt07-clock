@@ -63,6 +63,6 @@ begin
 		end
 	end
 end
-	assign uo_out=1'd1;
+	assign uo_out=clk;
 	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(12'h123),.bytee(second[3:0]),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]));
 endmodule
