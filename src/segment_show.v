@@ -1,7 +1,8 @@
 module segment_show(input clock,input reset,input [11:0]data_show,
 input [2:0]byte_status,
 		    output [3:0]bytee,output[6:0]segment);
-
+	assign segment={byte_status,bytee}
+		assign bytee={data_show[3:0]|data_show[7:4]|data_show[11:8]};
 //reg[15:0]bit_status;
 //always @(posedge clock or negedge reset)
 //begin
