@@ -75,5 +75,5 @@ begin
 	end
 end
 assign segment=second;
-assign segbyteement=second;
+assign bytee=second;
 endmodule
