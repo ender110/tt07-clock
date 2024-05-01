@@ -132,7 +132,7 @@ always @(posedge clock )
 begin
 	case(status)
 		status_show_time:data_show<={6'b0,hour,minute};
-		status_show_minute:data_show<={6'd25,minute};
+	//	status_show_minute:data_show<={6'd25,minute};
 		status_show_hour:data_show<={6'b0,hour,6'd25};
 		default:data_show<=12'hxxx;
 	endcase
