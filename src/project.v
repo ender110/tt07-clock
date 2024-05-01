@@ -64,6 +64,8 @@ begin
 	end
 end
 //minutes
+	wire minute_flag;
+	reg [5:0]minute;
 	assign minute_flag=second_flag&&(second==6'd59)&&clock_run_flag;
 	always @(posedge clock or negedge reset)
 begin
@@ -84,6 +86,31 @@ begin
 
 	end
 end
+//hour
+	reg [4:0]hour;
+	wire hour_flag;
+	assign hour_flag=minute_flag&&(minute==6'd59)&&clock_run_flag;
+	always @(posedge clock or negedge reset)
+begin
+	if(!reset)
+	begin
+		hour<=0;
+	end
+	else
+	begin
+		if(hour_flag)
+		begin
+			hour<=hour+1;
+			if(hour==23)
+			begin
+				hour<=0;
+			end
+		end
+	end
+end
 	assign uo_out[7]=clk;
+	reg [2:0]status=3'd0;
+	parameter status_show_time=3'd0;
+	assign data_show=status==status_show_time?{hour,minute}:0;
 	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(12'h123),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
 endmodule
