@@ -113,5 +113,5 @@ end
 	parameter status_show_time=3'd0;
 	wire[11:0]data_show;
 	assign data_show=status==status_show_time?{1'd1,hour,minute}:0;
-	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(12'h123),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
+	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
 endmodule
