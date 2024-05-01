@@ -17,7 +17,7 @@ module tt_um_example (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
-	reg [0]clock_run_flag=1;
+	reg clock_run_flag=1;
 	assign uio_out=uio_in+ui_in+{7'd0,ena};
 	assign uio_oe[7:4]=uio_in[7:4]+uio_in[3:0];
 wire reset;
