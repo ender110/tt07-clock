@@ -63,5 +63,5 @@ begin
 		end
 	end
 end
-	assign uo_out={2'd0,second[5:0]};
+	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(12'h123),.bytee(second[3:0]),.segment(uo_out),.byte_status(ui_in[2:0]));
 endmodule
