@@ -111,6 +111,51 @@ begin
 		end
 	end
 end
+	//day
+	reg [4:0]day;
+	wire day_flag;
+	assign day_flag=hour_flag&&(hour==5'd23)&&clock_run_flag;
+	always @(posedge clock or negedge reset)
+	begin
+		if(!reset)
+		begin
+			day<=0;
+		end
+		else
+		begin
+			if(day_flag)
+			begin
+				day<=day+4'd1;
+				if(day==4'd30)
+				begin
+					day_flag<4'd0;
+				end
+			end
+		end
+	end
+	//month
+	reg [3:0]month;
+	wire month_flag;
+	assign month_flag=day_flag&&(day==5'd30)&&clock_run_flag;
+	always @(posedge clock or negedge reset)
+	begin
+		if(!reset)
+		begin
+			day<=0;
+		end
+		else
+		begin
+			if(day_flag)
+			begin
+				month<=month+4'd1;
+				if(month==4'd30)
+				begin
+					month<=4'd0;
+				end
+			end
+		end
+	end
+	//
 	assign uo_out[7]=clk;
 	reg [2:0]status=3'd0;
 	parameter status_show_time=3'd0;
@@ -119,7 +164,7 @@ parameter status_show_minute=3'd2;
 parameter status_show_hour=3'd3;
 parameter status_show_day=3'd4;
 parameter status_show_month=3'd5;
- parameter status_show_stop=3'd6;
+//  parameter status_show_stop=3'd6;
 wire key_down;
 	assign key_down=ui_in[3];
 	reg [3:0]key_down_filtering;
@@ -148,6 +193,6 @@ wire key_down;
 			end
 	end
 	wire[11:0]data_show;
-	assign data_show=status==status_show_time?{1'd1,hour,minute}:status==status_show_time_date?{1'd1,hour,minute}:status==status_show_minute?{6'd0,minute}:status==status_show_hour?{1'd1,hour,6'd0}:0;
+	assign data_show=status==status_show_time?{1'd1,hour,minute}:status==status_show_time_date?{1'd1,hour,minute}:status==status_show_minute?{6'd0,minute}:status==status_show_hour?{1'd1,hour,6'd0}:status==status_show_day?{6'd0,1'd0,day[4:0]}:status==status_show_month?{2'd0,month,6'd0}:0;
 	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
 endmodule
