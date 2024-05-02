@@ -119,16 +119,16 @@ end
 	begin
 		if(!reset)
 		begin
-			day<=0;
+			day<=5'd0;
 		end
 		else
 		begin
 			if(day_flag)
 			begin
-				day<=day+4'd1;
-				if(day==4'd30)
+				day<=day+5'd1;
+				if(day==5'd30)
 				begin
-					day<=4'd0;
+					day<=5'd0;
 				end
 			end
 		end
