@@ -8,20 +8,21 @@
 `default_nettype none
 
 module tt_um_example (
-    input  wire [7:0] ui_in,    // Dedicated inputs
+	input  wire [6:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
     output wire [7:0] uio_out,  // IOs: Output path
     output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
     input  wire       ena,      // always 1 when the design is powered, so you can ignore it
     input  wire       clk,      // clock
-    input  wire       rst_n     // reset_n - low to reset
+    input  wire       rst_n,     // reset_n - low to reset
+	input wire key_down
 // input clock,
 // input reset,
 
 );
 	reg clock_run_flag=1;
-	assign uio_out=uio_in+ui_in+{7'd0,ena};
+	assign uio_out=uio_in+{1'd1,ui_in[6:0]}+{7'd0,ena};
 	assign uio_oe[7:4]=uio_in[7:4]+uio_in[3:0];
 wire reset;
 wire clock ;
