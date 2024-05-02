@@ -134,23 +134,23 @@ end
 		end
 	end
 	//month
-	reg [3:0]month;
-	wire month_flag;
-	assign month_flag=day_flag&&(day==5'd30)&&clock_run_flag;
+	reg [4:0]month;
+	//wire month_flag;
+	//assign month_flag=day_flag&&(day==5'd30)&&clock_run_flag;
 	always @(posedge clock or negedge reset)
 	begin
 		if(!reset)
 		begin
-			day<=0;
+			day<=5'd0;
 		end
 		else
 		begin
 			if(day_flag)
 			begin
-				month<=month+4'd1;
-				if(month==4'd30)
+				month<=month+5'd1;
+				if(month==5'd30)
 				begin
-					month<=4'd0;
+					month<=5'd0;
 				end
 			end
 		end
@@ -177,7 +177,7 @@ wire key_down;
 				end
 			else
 				begin
-					key_down_filtering<={key_down_filtering[3:0],key_down};
+					key_down_filtering<={key_down_filtering[2:0],key_down};
 				end
 		end
 	assign key_down_filted={3'd0,key_down_filtering[3]}+{3'd0,key_down_filtering[2]}+{3'd0,key_down_filtering[1]}+{3'd0,key_down_filtering[0]}>2?1:0;
