@@ -125,12 +125,20 @@ end
 		begin
 			if(day_flag)
 			begin
-				day<=day+5'd1;
+				
 				if(day==5'd30)
 				begin
 					day<=5'd0;
 				end
+				else
+				begin
+					day<=day+5'd1;
+				end
 			end
+			else
+				begin
+					day<=day;
+				end
 		end
 	end
 	//month
@@ -141,7 +149,7 @@ end
 	begin
 		if(!reset)
 		begin
-			day<=5'd0;
+			month<=5'd0;
 		end
 		else
 		begin
