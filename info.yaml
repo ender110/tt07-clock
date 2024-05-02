@@ -21,14 +21,14 @@ project:
 # The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
 pinout:
   # Inputs
-  ui[0]: "clock"
-  ui[1]: "reset"
+  ui[0]: "addr[0]"
+  ui[1]: "addr[1]"
   ui[2]: "addr[2]"
   ui[3]: "addr[3]"
   ui[4]: "addr[4]"
   ui[5]: "addr[5]"
   ui[6]: "addr[6]"
-  ui[7]: "addr[7]"
+  ui[7]: "key_down"
 
   # Outputs
   uo[0]: "data[0]"
