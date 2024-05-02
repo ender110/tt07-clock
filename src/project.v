@@ -148,6 +148,6 @@ wire key_down;
 			end
 	end
 	wire[11:0]data_show;
-	assign data_show=status==status_show_time?{1'd1,hour,minute}:0;
+	assign data_show=status==status_show_time?{1'd1,hour,minute}:status==status_show_time_date?{1'd1,hour,minute}:status==status_show_minute?{6'd0,minute}:status==status_show_hour?{1'd1,hour,6'd0}:0;
 	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
 endmodule
