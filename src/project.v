@@ -120,6 +120,33 @@ parameter status_show_hour=3'd3;
 parameter status_show_day=3'd4;
 parameter status_show_month=3'd5;
  parameter status_show_stop=3'd6;
+wire key_down;
+	assign key_down=ui_in[3];
+	reg [3:0]key_down_filtering;
+	wire key_down_filted;
+	always @(posedge clock_counter[10] or negedge reset )
+		begin
+			if(!reset)
+				begin
+					key_down_filtering<=4'd0;
+				end
+			else
+				begin
+					key_down_filtering<={key_down_filtering[3:0],key_down};
+				end
+		end
+	assign key_down_filted={3'd0,key_down_filtering[3]}+{3'd0,key_down_filtering[2]}+{3'd0,key_down_filtering[1]}+{3'd0,key_down_filtering[0]}>2?1:0;
+	always @(posedge key_down_filted or negedge reset )
+	begin
+		if(!reset)
+			begin
+				status<=3'd0;
+			end
+		else
+			begin
+				status<=status+1;
+			end
+	end
 	wire[11:0]data_show;
 	assign data_show=status==status_show_time?{1'd1,hour,minute}:0;
 	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
