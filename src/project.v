@@ -14,16 +14,19 @@ module tt_um_example (
     output wire [7:0] uio_out,  // IOs: Output path
     output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
     input  wire       ena,      // always 1 when the design is powered, so you can ignore it
-    input  wire       clk,      // clock
-    input  wire       rst_n     // reset_n - low to reset
+    // input  wire       clk,      // clock
+    // input  wire       rst_n     // reset_n - low to reset
+input clock,
+input reset,
+
 );
 	reg clock_run_flag=1;
 	assign uio_out=uio_in+ui_in+{7'd0,ena};
 	assign uio_oe[7:4]=uio_in[7:4]+uio_in[3:0];
-wire reset;
-wire clock ;
-assign clock=clk;
-assign reset=rst_n;
+// wire reset;
+// wire clock ;
+// assign clock=clk;
+// assign reset=rst_n;
 
 reg[15:0]clock_counter;
 always @(posedge clock or negedge reset)
