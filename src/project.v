@@ -128,7 +128,7 @@ end
 				day<=day+4'd1;
 				if(day==4'd30)
 				begin
-					day_flag<=4'd0;
+					day<=4'd0;
 				end
 			end
 		end
