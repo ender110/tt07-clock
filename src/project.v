@@ -111,6 +111,12 @@ end
 	assign uo_out[7]=clk;
 	reg [2:0]status=3'd0;
 	parameter status_show_time=3'd0;
+	parameter status_show_time_date=3'd1;
+parameter status_show_minute=3'd2;
+parameter status_show_hour=3'd3;
+parameter status_show_day=3'd4;
+parameter status_show_month=3'd5;
+ parameter status_show_stop=3'd6;
 	wire[11:0]data_show;
 	assign data_show=status==status_show_time?{1'd1,hour,minute}:0;
 	segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(ui_in[2:0]),.bytee(uio_oe[3:0]));
