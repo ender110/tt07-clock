@@ -8,7 +8,7 @@
 `default_nettype none
 
 module tt_um_example (
-	input  wire [6:0] ui_in,    // Dedicated inputs
+	input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
     output wire [7:0] uio_out,  // IOs: Output path
@@ -22,7 +22,7 @@ module tt_um_example (
 
 );
 	reg clock_run_flag=1;
-	assign uio_out=uio_in+{1'd1,ui_in[6:0]}+{7'd0,ena};
+	assign uio_out=uio_in+ui_in[6:0]+{7'd0,ena};
 	assign uio_oe[7:4]=uio_in[7:4]+uio_in[3:0];
 wire reset;
 wire clock ;
