@@ -273,18 +273,5 @@ end
 	      end
 	     
 	 end
-	wire[11:0]data_show;
-	assign data_show=status==status_show_time?{1'd0,hour,minute}:status==status_show_minute?{6'd0,minute}:status==status_show_hour?{1'd0,hour,6'd0}:status==status_show_day?{6'd0,1'd0,day[4:0]}:status==status_show_month?{2'd0,month,6'd0}:0;
-//segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(clock_counter[15:13]),.bytee(uio_out[3:0]));
-wire segment_clock_bit;
-assign segment_clock_bit=(status==status_show_time)&&clock_counter[23];
-wire [3:0]segment_byte_control;
-assign segment_byte_control=status==status_show_time?4'b1111:status==status_show_minute?4'b0011:status==status_show_hour?4'b1100:status==status_show_day?4'b0011:status==status_show_month?4'b1100:0;
-segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(clock_counter[15:13]),.bytee(uio_out[3:0]),.segment_byte_control(segment_byte_control));
-//driver output 
-//assign uio_oe={2'd0,minute};
-assign uio_out[7:4]=data_show[3:0];
-assign uio_oe[7:0]=uio_in[7:0]|ui_in[7:0];
-assign uo_out[7]=segment_clock_bit;
-//assign uo_out={2'd0,minute};
+
 endmodule
