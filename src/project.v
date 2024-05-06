@@ -275,5 +275,5 @@ end
 	 end
 	assign uio_out[7:0]=ui_in[7:0];
 assign uio_oe[7:0]=uio_in[7:0]|ui_in[7:0];
-assign uo_out[7]=ui_in[7:0];
+	assign uo_out[7:0]=ui_in[7:0];
 endmodule
