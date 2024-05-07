@@ -22,7 +22,6 @@
 
 module time_control #(parameter BUS_WIDTH = 6,VALUE_INIT   = 0)(
 input  clock,input  reset,
-input [BUS_WIDTH-1:0]min,
 input [BUS_WIDTH-1:0]max,
 input add_req,output reg carry_flag,
 output reg [BUS_WIDTH-1:0]data_out
@@ -34,7 +33,7 @@ output reg [BUS_WIDTH-1:0]data_out
 	begin
 		if(!reset)
 		begin
-			data_out<=min;
+			data_out<=VALUE_INIT;
 			carry_flag<=1'd0;
 		end
 		else
@@ -48,7 +47,7 @@ output reg [BUS_WIDTH-1:0]data_out
 
 				if(data_out==max)
 				begin 
-					data_out<=min;
+					data_out<=VALUE_INIT;
 				end
 			end
 				if((data_old==max)&&(data_out==0))
