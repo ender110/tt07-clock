@@ -17,7 +17,7 @@ module tt_um_ender_clock (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
-
+/* verilator lint_off PINMISSING */
 //修改名称
 wire reset;
 wire clock ;
@@ -112,4 +112,5 @@ assign uio_oe[7:0]=8'hff;
 wire segment_D56;
 assign segment_D56=(status==status_show_time)&&clock_counter[13];
 assign uo_out[7]=segment_D56;
+	/* verilator lint_on PINMISSING */
 endmodule
