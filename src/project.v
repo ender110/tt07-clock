@@ -284,7 +284,7 @@ segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.se
 //driver output 
 //assign uio_oe={2'd0,minute};
 assign uio_out[7:4]=data_show[3:0];
-assign uio_oe[7:0]=8'h0;
+	assign uio_oe[7:0]=8'ff;
 assign uo_out[7]=segment_clock_bit;
 //assign uo_out={2'd0,minute};
 endmodule
