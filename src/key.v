@@ -18,7 +18,7 @@
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
-
+/* verilator lint_off UNUSEDSIGNAL */
 
 module key(
 input  clock,input  reset,input time_flag,
