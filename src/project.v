@@ -67,7 +67,7 @@ time_control #(5,0) time_control_day(  .clock(clock),  .reset(reset), .add_req(h
 //month
 wire [3:0]month;
 wire month_carry;
-time_control #(5,1) time_control_month(  .clock(clock),  .reset(reset), .add_req(day_carry||((status==status_show_day)&&key_add_negedge)),.data_out(month),.carry_flag(month_carry),.max(12) );
+	time_control #(4,1) time_control_month(  .clock(clock),  .reset(reset), .add_req(day_carry||((status==status_show_day)&&key_add_negedge)),.data_out(month),.carry_flag(month_carry),.max(12) );
 //key
 wire key_10ms_flag;
 wire key_add_negedge;
