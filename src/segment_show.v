@@ -6,13 +6,13 @@ assign data_showing=byte_status==0?data_show[5:0]:byte_status==2?data_show[5:0]:
 wire [3:0]segment_show;
 reg [6:0] segment_show_code;
 	/* verilator lint_off WIDTHEXPAND */
-	 "/* verilator lint_off WIDTHTRUNC */"
+	 /* verilator lint_off WIDTHTRUNC */
 assign segment_show = (byte_status == 3'd0) ? (data_showing % 10) :
                       (byte_status == 3'd2) ? (data_showing / 10) :
                       (byte_status == 3'd4) ? (data_showing % 10) :
                       (byte_status == 3'd6) ? (data_showing / 10) : 4'd0;
 	/* verilator lint_on WIDTHEXPAND */
-	 "/* verilator lint_on WIDTHTRUNC */"
+	 /* verilator lint_on WIDTHTRUNC */
 always @(posedge clock or negedge reset)
 begin
     if(!reset)
