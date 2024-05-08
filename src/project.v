@@ -55,20 +55,20 @@ time_control #(6,0) time_control_second(  .clock(clock),  .reset((reset&clock_ru
 //minutes
 wire [5:0]minute;
 wire minute_carry;
-time_control #(5,0) time_control_minute(  .clock(clock),  .reset(reset), .add_req(second_carry||((status==status_show_minute)&&key_add_negedge)),.data_out(minute),.carry_flag(minute_carry),.max(59) );
+	time_control #(6,0) time_control_minute(  .clock(clock),  .reset(reset), .add_req(second_carry||((status==status_show_minute)&&key_add_negedge)),.data_out(minute),.carry_flag(minute_carry),.max(6'd59) );
 //hour
 wire [4:0]hour;
 wire hour_carry;
-time_control #(5,0) time_control_hour(  .clock(clock),  .reset(reset), .add_req(minute_carry||((status==status_show_hour)&&key_add_negedge)),.data_out(hour),.carry_flag(hour_carry),.max(23) );
+	time_control #(5,0) time_control_hour(  .clock(clock),  .reset(reset), .add_req(minute_carry||((status==status_show_hour)&&key_add_negedge)),.data_out(hour),.carry_flag(hour_carry),.max(5'd23) );
 //day
 wire [4:0]day;
 wire[4:0]day_this_month;
 wire day_carry;
-time_control #(5,0) time_control_day(  .clock(clock),  .reset(reset), .add_req(hour_carry||((status==status_show_day)&&key_add_negedge)),.data_out(day),.carry_flag(day_carry),.max(day_this_month) );
+	time_control #(5,0) time_control_day(  .clock(clock),  .reset(reset), .add_req(hour_carry||((status==status_show_day)&&key_add_negedge)),.data_out(day),.carry_flag(day_carry),.max(day_this_month[4:0)]) );
 //month
 wire [3:0]month;
 wire month_carry;
-	time_control #(4,1) time_control_month(  .clock(clock),  .reset(reset), .add_req(day_carry||((status==status_show_day)&&key_add_negedge)),.data_out(month),.carry_flag(month_carry),.max(12) );
+	time_control #(4,1) time_control_month(  .clock(clock),  .reset(reset), .add_req(day_carry||((status==status_show_day)&&key_add_negedge)),.data_out(month),.carry_flag(month_carry),.max(4'd12) );
 //key
 wire key_10ms_flag;
 wire key_add_negedge;
@@ -100,7 +100,7 @@ key key_mode(  .clock(clock),  .reset(reset), .time_flag(key_10ms_flag), .key_in
 day_of_month day_of_month_0(.month(month),.day_this_month(day_this_month));
 	//status
 
-time_control #(3,status_show_time) time_control_status(  .clock(clock),  .reset(reset), .add_req(key_mode_negedge),.data_out(status),.max(status_show_day));
+	time_control #(3,status_show_time) time_control_status(  .clock(clock),  .reset(reset), .add_req(key_mode_negedge),.data_out(status),.max(status_show_day[3:0]));
 
 
 
