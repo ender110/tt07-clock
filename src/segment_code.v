@@ -21,7 +21,7 @@
 
 
 module segment_code(
-input  [3:0]number,output [6:0]code
+input wire  [3:0]number,output wire [6:0]code
     );
-//    assign code=number==0?7'h3f:number==1?7'h06:number==2?7'h5b:number==3?7'h4f:number==4?7'h66:number==5?7'h6d:number==6?7'h7d:number==7?7'h07:number==8?7'h7f:number==9?7'h6f:7'h0;
+    assign code=number==0?7'h3f:number==1?7'h06:number==2?7'h5b:number==3?7'h4f:number==4?7'h66:number==5?7'h6d:number==6?7'h7d:number==7?7'h07:number==8?7'h7f:number==9?7'h6f:7'h0;
 endmodule
