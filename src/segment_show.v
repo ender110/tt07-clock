@@ -1,5 +1,5 @@
-module segment_show(input clock,input reset,input [11:0]data_show,
-input [2:0]byte_status,output [3:0]bytee,output[6:0]segment,input [3:0]segment_byte_control);
+module segment_show(input wire clock,input wire reset,input  wire [11:0]data_show,
+input wire [2:0]byte_status,output wire [3:0]bytee,output wire [6:0]segment,input wire [3:0]segment_byte_control);
 
 wire [5:0]data_showing;
 assign data_showing=byte_status==0?data_show[5:0]:byte_status==2?data_show[5:0]:byte_status==4?data_show[11:6]:byte_status==6?data_show[11:6]:0;
@@ -15,7 +15,7 @@ assign segment_show = (byte_status == 3'd0) ? (data_showing % 10) :
 	 /* verilator lint_on WIDTHTRUNC */
 always @(posedge clock or negedge reset)
 begin
-    if(!reset)
+    if(reset==1'b0)
     begin
         segment_show_code<=7'd0;
     end
