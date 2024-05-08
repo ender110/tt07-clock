@@ -18,6 +18,7 @@ module tt_um_ender_clock (
     input  wire       rst_n     // reset_n - low to reset
 );
 /* verilator lint_off PINMISSING */
+	/* verilator lint_off WIDTHTRUNC */
 //修改名称
 wire reset;
 wire clock ;
