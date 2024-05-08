@@ -19,6 +19,7 @@ module tt_um_ender_clock (
 );
 /* verilator lint_off PINMISSING */
 	/* verilator lint_off WIDTHTRUNC */
+	/* verilator lint_off UNUSEDSIGNAL */
 //修改名称
 wire reset;
 wire clock ;
