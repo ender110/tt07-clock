@@ -8,7 +8,6 @@
 `default_nettype none
 /* verilator lint_off PINMISSING */
 	/* verilator lint_off WIDTHTRUNC */
-	/* verilator lint_off UNUSEDSIGNAL */
 module tt_um_ender_clock (
 	input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
@@ -47,10 +46,12 @@ begin
 end
 //second clock
 wire second_flag;
-time_control #(16,0) time_control_second_flags(  .clock(clock),  .reset((reset&clock_run_flag)), .add_req(1'd1),.carry_flag(second_flag),.max(16'd32767) );
+wire [15:0]clock_count;
+time_control #(16,0) time_control_second_flags(  .clock(clock),  .reset((reset&clock_run_flag)), .add_req(1'd1),.carry_flag(second_flag),.data_out(clock_count),.max(16'd32767) );
 //second
 wire second_carry;
-time_control #(6,0) time_control_second(  .clock(clock),  .reset((reset&clock_run_flag)), .add_req(second_flag),.carry_flag(second_carry),.max(6'd59) );
+wire [5:0]seond;
+time_control #(6,0) time_control_second(  .clock(clock),  .reset((reset&clock_run_flag)), .add_req(second_flag),.carry_flag(second_carry),.data_out(seond),.max(6'd59) );
 //minutes
 wire [5:0]minute;
 wire minute_carry;
