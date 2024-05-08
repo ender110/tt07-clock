@@ -5,10 +5,12 @@ wire [5:0]data_showing;
 assign data_showing=byte_status==0?data_show[5:0]:byte_status==2?data_show[5:0]:byte_status==4?data_show[11:6]:byte_status==6?data_show[11:6]:0;
 wire [3:0]segment_show;
 reg [6:0] segment_show_code;
+	/* verilator lint_off WIDTHEXPAND */
 assign segment_show = (byte_status == 3'd0) ? (data_showing % 10) :
                       (byte_status == 3'd2) ? (data_showing / 10) :
                       (byte_status == 3'd4) ? (data_showing % 10) :
                       (byte_status == 3'd6) ? (data_showing / 10) : 4'd0;
+	/* verilator lint_on WIDTHEXPAND */
 always @(posedge clock or negedge reset)
 begin
     if(!reset)
