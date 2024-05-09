@@ -99,8 +99,8 @@ key key_mode(  .clock(clock),  .reset(reset), .time_flag(key_10ms_flag), .key_in
 	end
 day_of_month day_of_month_0(.month(month),.day_this_month(day_this_month));
 	//status
-
-	time_control #(3,status_show_time) time_control_status(  .clock(clock),  .reset(reset), .add_req(key_mode_negedge),.data_out(status),.max(status_show_day[2:0]));
+	wire status_carry;
+	time_control #(3,status_show_time) time_control_status(  .clock(clock),  .reset(reset), .add_req(key_mode_negedge),.data_out(status),.max(status_show_day[2:0]),.carry_flag(status_carry));
 
 
 
