@@ -6,11 +6,14 @@ assign data_showing=byte_status==0?data_show[5:0]:byte_status==2?data_show[5:0]:
 wire [3:0]segment_show;
 wire [6:0] segment_show_code;
 	/* verilator lint_off WIDTHEXPAND */
-
-	assign segment_show = (byte_status == 3'd0) ? (data_showing % 10)[3:0] :
-                      (byte_status == 3'd2) ? (data_showing / 10)[3:0]  :
-                      (byte_status == 3'd4) ? (data_showing % 10)[3:0]  :
-                      (byte_status == 3'd6) ? (data_showing / 10)[3:0]  : 4'd0;
+	wire [3:0]hundreds;
+	wire [3:0]tens;
+	assign hundreds= (data_showing / 10)[3:0] ;
+	assign tens= (data_showing % 10)[3:0] ;
+	assign segment_show = (byte_status == 3'd0) ?tens:
+                      (byte_status == 3'd2) ?hundreds:
+                      (byte_status == 3'd4) ? tens  :
+                      (byte_status == 3'd6) ?hundreds  : 4'd0;
 	/* verilator lint_on WIDTHEXPAND */
 
 segment_code segment_code_0(.number(segment_show),.code(segment_show_code));
