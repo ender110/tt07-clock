@@ -4,7 +4,7 @@
  * Copyright (c) 2024 Your Name
  * SPDX-License-Identifier: Apache-2.0
  */
-
+/* verilator lint_off UNUSEDSIGNAL */
 `default_nettype none
 	/* verilator lint_off WIDTHTRUNC */
 module tt_um_ender_clock (
@@ -116,3 +116,4 @@ assign segment_D56=(status==status_show_time)&&clock_counter[13];
 assign uo_out[7]=segment_D56;
 	
 endmodule
+/* verilator lint_on UNUSEDSIGNAL */
