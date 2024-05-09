@@ -1,3 +1,4 @@
+/* verilator lint_off UNUSEDSIGNAL */
 module segment_show(input wire clock,input wire reset,input  wire [11:0]data_show,
 input wire [2:0]byte_status,output wire [3:0]bytee,output wire [6:0]segment,input wire [3:0]segment_byte_control);
 
@@ -21,3 +22,4 @@ segment_code segment_code_0(.number(segment_show),.code(segment_show_code));
 assign segment=segment_show_code;
 assign bytee=byte_status==0?4'b1110|(~segment_byte_control):byte_status==2?4'b1101|(~segment_byte_control):byte_status==4?4'b1011|(~segment_byte_control):byte_status==6?4'b0111|(~segment_byte_control):4'b1111;
 endmodule
+/* verilator lint_on UNUSEDSIGNAL */
