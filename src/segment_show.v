@@ -8,13 +8,14 @@ wire [6:0] segment_show_code;
 	/* verilator lint_off WIDTHEXPAND */
 	wire [3:0]hundreds;
 	wire [3:0]tens;
-	assign hundreds= (data_showing / 10)[3:0] ;
-	assign tens= (data_showing % 10)[3:0] ;
+	assign hundreds= (data_showing / 10) ;
+	assign tens= (data_showing % 10) ;
+		/* verilator lint_on WIDTHEXPAND */
 	assign segment_show = (byte_status == 3'd0) ?tens:
                       (byte_status == 3'd2) ?hundreds:
                       (byte_status == 3'd4) ? tens  :
                       (byte_status == 3'd6) ?hundreds  : 4'd0;
-	/* verilator lint_on WIDTHEXPAND */
+
 
 segment_code segment_code_0(.number(segment_show),.code(segment_show_code));
 assign segment=segment_show_code;
