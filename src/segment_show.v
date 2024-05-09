@@ -5,12 +5,12 @@ wire [5:0]data_showing;
 assign data_showing=byte_status==0?data_show[5:0]:byte_status==2?data_show[5:0]:byte_status==4?data_show[11:6]:byte_status==6?data_show[11:6]:0;
 wire [3:0]segment_show;
 wire [6:0] segment_show_code;
-	/* verilator lint_off WIDTHEXPAND */
+	/* verilator lint_off WIDTHTRUNC  */
 	wire [3:0]hundreds;
 	wire [3:0]tens;
 	assign hundreds= (data_showing / 10) ;
 	assign tens= (data_showing % 10) ;
-		/* verilator lint_on WIDTHEXPAND */
+		/* verilator lint_on WIDTHTRUNC  */
 	assign segment_show = (byte_status == 3'd0) ?tens:
                       (byte_status == 3'd2) ?hundreds:
                       (byte_status == 3'd4) ? tens  :
