@@ -6,7 +6,6 @@
  */
 
 `default_nettype none
-/* verilator lint_off PINMISSING */
 	/* verilator lint_off WIDTHTRUNC */
 module tt_um_ender_clock (
 	input  wire [7:0] ui_in,    // Dedicated inputs
@@ -115,5 +114,5 @@ assign uio_oe[7:0]=8'hff;
 wire segment_D56;
 assign segment_D56=(status==status_show_time)&&clock_counter[13];
 assign uo_out[7]=segment_D56;
-	/* verilator lint_on PINMISSING */
+	
 endmodule
