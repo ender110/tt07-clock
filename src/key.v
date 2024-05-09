@@ -25,7 +25,6 @@ input key_in,output key_out
     );
     
 	reg [3:0]key_filter;
-	wire key_mode_negedge;
 	always @(posedge clock or negedge reset)
 	begin
 	   if(reset==1'd0)
