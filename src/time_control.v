@@ -43,14 +43,14 @@ output reg [BUS_WIDTH-1:0]data_out
 			if(add_req)
 			begin
 				//data<=data+{{BUS_WIDTH-1{1'b0}},{1'd0}};
-		data_out<=data_out+1;
+		          data_out<=data_out+1;
 
 				if(data_out==max)
 				begin 
 					data_out<=VALUE_INIT;
 				end
 			end
-				if((data_old==max)&&(data_out==0))
+				if((data_old==max)&&(data_out==VALUE_INIT))
 			     begin
 			         carry_flag<=1'd1;
 			     end
@@ -58,6 +58,6 @@ output reg [BUS_WIDTH-1:0]data_out
 			     begin
 			         carry_flag<=1'd0;
 			     end
-		end
+		  end
 	end
 endmodule

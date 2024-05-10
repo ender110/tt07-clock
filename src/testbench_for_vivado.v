@@ -29,7 +29,7 @@ module testbench_for_vivado(
     begin
     clock=0;
     forever
-    #10 clock=~clock;
+    #30517 clock=~clock;
     end
      tt_um_ender_clock tt_um_ender_clock1 (
      .clk(clock),
