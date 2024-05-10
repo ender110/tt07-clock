@@ -67,12 +67,12 @@ wire day_carry;
 //month
 wire [3:0]month;
 wire month_carry;
-	time_control #(4,1) time_control_month(  .clock(clock),  .reset(reset), .add_req(day_carry||((status==status_show_day)&&key_add_negedge)),.data_out(month),.carry_flag(month_carry),.max(4'd12) );
+	time_control #(4,1) time_control_month(  .clock(clock),  .reset(reset), .add_req(day_carry||((status==status_show_month)&&key_add_negedge)),.data_out(month),.carry_flag(month_carry),.max(4'd12) );
 //key
 wire key_10ms_flag;
 wire key_add_negedge;
 wire [8:0]counter_10ms;
-time_control #(9,0) time_control_10ms(  .clock(clock),  .reset(reset), .add_req(clock),.data_out(counter_10ms),.carry_flag(key_10ms_flag),.max(10'd327) );
+time_control #(9,0) time_control_10ms(  .clock(clock),  .reset(reset), .add_req(1'b1),.data_out(counter_10ms),.carry_flag(key_10ms_flag),.max(9'd327) );
 
 key key_add(  .clock(clock),  .reset(reset), .time_flag(key_10ms_flag), .key_in(ui_in[1]), .key_out(key_add_negedge) );
 wire key_mode_negedge;

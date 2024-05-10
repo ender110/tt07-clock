@@ -1,4 +1,4 @@
-`timescale 1ns / 1ps
+`timescale 1ns / 1ns
 //////////////////////////////////////////////////////////////////////////////////
 // Company: 
 // Engineer: 
@@ -24,17 +24,26 @@ module testbench_for_vivado(
 
     );
     reg clock;
-    reg reset=1;
+    reg reset=0;
+    reg[7:0]ui_in=8'hff;
     initial
     begin
     clock=0;
+    #20 reset=1;
     forever
     #30517 clock=~clock;
     end
+    initial
+    begin
+    #1000469328 ui_in[0]=1'b0;
+    #1000469328 ui_in[0]=1'b1;
+        #1000469328 ui_in[1]=1'b0;
+    #1000469328 ui_in[1]=1'b1;
+    end
      tt_um_ender_clock tt_um_ender_clock1 (
      .clk(clock),
-     .rsr_n(reset)
-//	input  wire [7:0] ui_in,    // Dedicated inputs
+     .rst_n(reset),
+	.ui_in(ui_in)    // Dedicated inputs
 //    output wire [7:0] uo_out,   // Dedicated outputs
 //    input  wire [7:0] uio_in,   // IOs: Input path
 //    output wire [7:0] uio_out,  // IOs: Output path
