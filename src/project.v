@@ -30,7 +30,7 @@ parameter status_show_hour=3'd1;
 parameter status_show_minute=3'd2;
 parameter status_show_month=3'd3;
 parameter status_show_day=3'd4;
-reg clock_run_flag=1'd1;
+reg clock_run_flag;
 reg[15:0]clock_counter;
 always @(posedge clock or negedge reset)
 begin
