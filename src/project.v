@@ -108,11 +108,11 @@ wire [3:0]segment_byte_control;
 assign segment_byte_control=status==status_show_time?4'b1111:status==status_show_minute?4'b0011:status==status_show_hour?4'b1100:status==status_show_day?4'b0011:status==status_show_month?4'b1100:0;
 segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(clock_counter[5:3]),.bytee(uio_out[3:0]),.segment_byte_control(segment_byte_control));
 wire[11:0]data_show;
-assign data_show=status==status_show_time?{1'd0,hour,minute}:status==status_show_minute?{6'd0,minute}:status==status_show_hour?{1'd0,hour,6'd0}:status==status_show_day?{6'd0,1'd0,day[4:0]}:status==status_show_month?{2'd0,month,6'd0}:0;
+assign data_show=status==status_show_time?(ui_in[1]==1?{1'd0,hour,minute}:{2'd0,month,1'd0,day[4:0]}):status==status_show_minute?{6'd0,minute}:status==status_show_hour?{1'd0,hour,6'd0}:status==status_show_day?{6'd0,1'd0,day[4:0]}:status==status_show_month?{2'd0,month,6'd0}:0;
 assign uio_out[7:4]=data_show[3:0];
 assign uio_oe[7:0]=8'hff;
 wire segment_D56;
-assign segment_D56=(status==status_show_time)&&clock_counter[13];
+assign segment_D56=(status==status_show_time)&&clock_counter[13]&&(ui_in[1]==1'd1);
 assign uo_out[7]=segment_D56;
 	
 endmodule

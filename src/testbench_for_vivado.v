@@ -31,15 +31,16 @@ module testbench_for_vivado(
     clock=0;
     #20 reset=1;
     forever
-    #30517 clock=~clock;
+//    #30517 clock=~clock;
+    #1 clock=~clock;
     end
-    initial
-    begin
-    #1000469328 ui_in[0]=1'b0;
-    #1000469328 ui_in[0]=1'b1;
-        #1000469328 ui_in[1]=1'b0;
-    #1000469328 ui_in[1]=1'b1;
-    end
+//    initial
+//    begin
+//    #1000469328 ui_in[0]=1'b0;
+//    #1000469328 ui_in[0]=1'b1;
+//        #1000469328 ui_in[1]=1'b0;
+//    #1000469328 ui_in[1]=1'b1;
+//    end
      tt_um_ender_clock tt_um_ender_clock1 (
      .clk(clock),
      .rst_n(reset),
