@@ -23,6 +23,7 @@ async def test_project(dut):
     dut.rst_n.value=0;
     for i in range(10):
         dut.i_encoder_a.value=1-dut.i_encoder_a.value;
+        await ClockCycles(dut.clk, 5)
         dut.i_encoder_b.value=1-dut.i_encoder_b.value;
         await ClockCycles(dut.clk, 5)
     # # Reset
