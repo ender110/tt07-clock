@@ -68,5 +68,11 @@ async def test_project(dut):
                 await ClockCycles(dut.clk, 1)
                 # assert dut.o_step_forward.value == 0
                 # assert dut.o_step_back.value == 0
+        #取消正交编码
+    dut.i_orthogonal_en.value=0;
+    for i in range(10):
+        dut.i_encoder_a.value=1-dut.i_encoder_a.value;
+        dut.i_encoder_b.value=1-dut.i_encoder_b.value;
+        await ClockCycles(dut.clk, 5)
     # 编码器抖动情况
     
