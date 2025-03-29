@@ -42,16 +42,16 @@ async def test_project(dut):
         #两个脉冲后产生脉冲信号
         dut.i_encoder_b.value=1-dut.i_encoder_b.value;
         await ClockCycles(dut.clk, 3)
-        # assert dut.o_step_forward.value == 1
+        assert dut.o_step_forward.value == 1
         # 只产生一个时钟的信号，下一个时钟已经为低
         await ClockCycles(dut.clk, 1)
-        # assert dut.o_steo_step_forwardp_back.value == 0
+        assert dut.o_steo_step_forwardp_back.value == 0
         #两个脉冲后产生脉冲信号
         dut.i_encoder_a.value=1-dut.i_encoder_a.value;
         await ClockCycles(dut.clk, 3)
-        # assert dut.o_step_forward.value == 1
+        assert dut.o_step_forward.value == 1
         # 只产生一个时钟的信号，下一个时钟已经为低
         await ClockCycles(dut.clk, 1)
-        # assert dut.o_steo_step_forwardp_back.value == 0
+        assert dut.o_steo_step_forwardp_back.value == 0
     # 编码器抖动情况
     
