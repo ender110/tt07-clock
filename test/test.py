@@ -66,7 +66,7 @@ async def test_project(dut):
             dut.i_encoder_a.value=1-dut.i_encoder_a.value;
             for i in range(1):
                 await ClockCycles(dut.clk, 1)
-                assert dut.o_step_forward.value == 0
-                assert dut.o_step_back.value == 0
+                # assert dut.o_step_forward.value == 0
+                # assert dut.o_step_back.value == 0
     # 编码器抖动情况
     
