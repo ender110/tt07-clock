@@ -19,7 +19,7 @@ module tb ();
   reg i_encoder_a,i_encoder_b,i_orthogonal_en;
   wire o_step_forward,o_step_back;
   // Replace tt_um_example with your module name:
-  tt_um_ender_clock user_project (
+  tsp_enc_step_parse user_project (
 
       // Include power ports for the Gate Level test:
 `ifdef GL_TEST
