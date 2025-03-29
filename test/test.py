@@ -11,11 +11,12 @@ async def test_project(dut):
     dut._log.info("Start")
 
     # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
+    clock = Clock(dut.clk, 10, units="ps")
     #初始化信号
     dut.rst_n.value=1;
     dut.i_encoder_a.value=0;
     dut.i_encoder_b.value=1;
+    dut.i_orthogonal_en.value=1;
     cocotb.start_soon(clock.start())
     #结束复位
     await ClockCycles(dut.clk, 10)
