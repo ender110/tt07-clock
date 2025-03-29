@@ -1,119 +1,171 @@
- 
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+//! @title      编码器步骤解析 功能单元(TSP Encoder Step Parse)
+//! @copyright  Next Vision Tech
+//! @author     Mxt
+//! @version    1.1
+//! @date       2024.08.20
 
+//! 根据编码器输入，对编码器当前运动状态进行解析
+//! * 当前模块运行时钟(s_clk)与编码器周期之间无关联，运行时钟周期远远快于编码器周期
+//! * 当前模块支持的编码器设备为 <font color=red>ATOM2T1(G1光栅尺编码器)</font>
+//! * 对编码器输入的前两个周期状态进行判断，得到当前周期编码器运动的状态(前进/后退)
+//! * 兼容正交频率使能时编码器的运动状态,正交频率使能一般不打开
+//! * 编码器周期状态的判定可查看svn上编码器部分的图片说明
+//! * **输出的前进/后退信号与模块运行时钟(s_clk)同步，与编码器周期无关**
+//!
+//!  **正向(前进，非正交模式)**状态下编码器波形
+//! { signal: [
+//!     { name: "CLK",  wave:   "P...............X.........." , period:0.5  },     
+//!     { name: "COMPLETE CYCLE(T)",  wave:   "==x", data:["T0","T1"] , period:8 }, 
+//!     { name: "A",  wave:   "P.X" , period:8 },
+//!     { name: "B",  wave:   "P..X" , period:8 , phase:6 },
+//!     { name: "PHASE",  wave:   "========x...", data:["10","11","01","00","10","11","01","00","10","11","01","00"] , period:2},
+//!     { name: "STEP FORWARD",  wave:   "0.....10......10..x...."}
+//! ]}
+//!
+//!  **反向(后退，非正交模式)**状态下编码器波形
+//! { signal: [
+//!     { name: "CLK",  wave:   "P...............X.........." , period:0.5  },   
+//!     { name: "COMPLETE CYCLE(T)",  wave:   "==x", data:["T0","T1"] , period:8 }, 
+//!     { name: "A",  wave:   "P.X" , period:8 },
+//!     { name: "B",  wave:   "P..X" , period:8 , phase:2 },
+//!     { name: "BACK PHASE",  wave:   "========x...", data:["11","10","00","01","11","10","00","01","11","10","00","01"] , period:2},
+//!     { name: "STEP BACK",  wave:   "0.....10......10..x..."}
+//! ]}
+//! ----------------------------------------------------------------------------
+//! 版本历史:
+//! | version   | author    | date      | description   |
+//! | :---:     | :---:     | :---:     | ---           |
+//! | 1.0       | Mxt       | 2024.4.2  | 初版设计      |
+//! | 1.1       | Mxt       | 2024.8.20 | 接口优化  |
+//!
+// -----------------------------------------------------------------------------
 /*
- * Copyright (c) 2024 Your Name
- * SPDX-License-Identifier: Apache-2.0
- */
-/* verilator lint_off UNUSEDSIGNAL */
-`default_nettype none
-	/* verilator lint_off WIDTHTRUNC */
-module tt_um_ender_clock (
-	input  wire [7:0] ui_in,    // Dedicated inputs
-    output wire [7:0] uo_out,   // Dedicated outputs
-    input  wire [7:0] uio_in,   // IOs: Input path
-    output wire [7:0] uio_out,  // IOs: Output path
-    output wire [7:0] uio_oe,   // IOs: Enable path (active high: 0=input, 1=output)
-    input  wire       ena,      // always 1 when the design is powered, so you can ignore it
-    input  wire       clk,      // clock
-    input  wire       rst_n     // reset_n - low to reset
+使用示例：
+tsp_enc_step_parse  tsp_enc_step_parse_inst (
+    .clk            (clk),              // 1-bit input: 输入时钟
+    .rstp           (rstp),             // 1-bit input: 复位信号，高有效
+    .i_encoder_a    (i_encoder_a),      // 1-bit input: 编码器输入源A
+    .i_encoder_b    (i_encoder_b),      // 1-bit input: 编码器输入源B
+    .i_orthogonal_en(i_orthogonal_en),  // 1-bit input: 正交频率使能，参数配置
+    .o_step_forward (o_step_forward),   // 1-bit output: 正向(前进)信号,同步信号(脉冲) 
+    .o_step_back    (o_step_back)       // 1-bit output: 反向(后退)信号，同步信号(脉冲) 
+  );
+*/
+
+module tsp_enc_step_parse(
+    
+    //! 时钟
+    input   logic               clk,
+    //! 复位(高有效)
+    input   logic               rstp,
+
+    //! 编码器输入源A
+    input   logic               i_encoder_a,
+    //! 编码器输入源B
+    input   logic               i_encoder_b,
+    //! 正交频率使能(正交频率是信号频率的4倍)，参数配置
+    input   logic               i_orthogonal_en,
+
+
+    //! 正向(前进)信号
+    output logic                o_step_forward,
+    //! 反向(后退)信号
+    output logic                o_step_back
 );
 
-//修改名称
-wire reset;
-wire clock ;
-assign clock=clk;
-assign reset=rst_n;
-//control signel
-wire [2:0]status;
-parameter status_show_time=3'd0;
-parameter status_show_hour=3'd1;
-parameter status_show_minute=3'd2;
-parameter status_show_month=3'd3;
-parameter status_show_day=3'd4;
-reg clock_run_flag;
-reg[15:0]clock_counter;
-always @(posedge clock or negedge reset)
-begin
-	if(!reset)
-	begin
-		clock_counter<=16'd0;
-	end
-	else
-	begin
-	       clock_counter<=clock_counter+16'd1;
-	end
-end
-//second clock
-wire second_flag;
-wire [15:0]clock_count;
-time_control #(16,0) time_control_second_flags(  .clock(clock),  .reset((reset&clock_run_flag)), .add_req(1'd1),.carry_flag(second_flag),.data_out(clock_count),.max(16'd32767) );
-//second
-wire second_carry;
-wire [5:0]seond;
-time_control #(6,0) time_control_second(  .clock(clock),  .reset((reset&clock_run_flag)), .add_req(second_flag),.carry_flag(second_carry),.data_out(seond),.max(6'd59) );
-//minutes
-wire [5:0]minute;
-wire minute_carry;
-	time_control #(6,0) time_control_minute(  .clock(clock),  .reset(reset), .add_req(second_carry||((status==status_show_minute)&&key_add_negedge)),.data_out(minute),.carry_flag(minute_carry),.max(6'd59) );
-//hour
-wire [4:0]hour;
-wire hour_carry;
-	time_control #(5,0) time_control_hour(  .clock(clock),  .reset(reset), .add_req(minute_carry||((status==status_show_hour)&&key_add_negedge)),.data_out(hour),.carry_flag(hour_carry),.max(5'd23) );
-//day
-wire [4:0]day;
-wire[4:0]day_this_month;
-wire day_carry;
-	time_control #(5,1) time_control_day(  .clock(clock),  .reset(reset), .add_req(hour_carry||((status==status_show_day)&&key_add_negedge)),.data_out(day),.carry_flag(day_carry),.max(day_this_month[4:0]) );
-//month
-wire [3:0]month;
-wire month_carry;
-	time_control #(4,1) time_control_month(  .clock(clock),  .reset(reset), .add_req(day_carry||((status==status_show_month)&&key_add_negedge)),.data_out(month),.carry_flag(month_carry),.max(4'd12) );
-//key
-wire key_10ms_flag;
-wire key_add_negedge;
-wire [8:0]counter_10ms;
-time_control #(9,0) time_control_10ms(  .clock(clock),  .reset(reset), .add_req(1'b1),.data_out(counter_10ms),.carry_flag(key_10ms_flag),.max(9'd327) );
+/*********************************************************************************************************/
+/**********************************************localparam*************************************************/
+/*********************************************************************************************************/
 
-key key_add(  .clock(clock),  .reset(reset), .time_flag(key_10ms_flag), .key_in(ui_in[1]), .key_out(key_add_negedge) );
-wire key_mode_negedge;
-key key_mode(  .clock(clock),  .reset(reset), .time_flag(key_10ms_flag), .key_in(ui_in[0]), .key_out(key_mode_negedge) );
+    //! 定义编码器组合状态1
+    logic   [1:0]   phase0;            
+    //! 定义编码器组合状态2
+    logic   [1:0]   phase1; 
+    //! 定义编码器组合状态3
+    logic   [1:0]   phase2;
+    //! 定义编码器组合状态4
+    logic   [1:0]   phase3;
     
-	//clock_run_flag
-	always @(posedge clock or negedge reset)
-	begin
-	   if(!reset)
-	   begin
-	       clock_run_flag<=1'd1;
-	   end
-	   else
-	   begin
-	       if((status!=status_show_time)&&(key_add_negedge))
-	       begin
-	           clock_run_flag<=1'd0;
-	       end
-	       if(status==status_show_time)
-	       begin
-	           clock_run_flag<=1'd1;
-	       end
-	   end
-	end
-day_of_month day_of_month_0(.month(month),.day_this_month(day_this_month));
-	//status
-	wire status_carry;
-	time_control #(3,status_show_time) time_control_status(  .clock(clock),  .reset(reset), .add_req(key_mode_negedge),.data_out(status),.max(status_show_day[2:0]),.carry_flag(status_carry));
+    assign  phase0  =   2'b00;  
+    assign  phase1  =   2'b10;  
+    assign  phase2  =   2'b11;
+    assign  phase3  =   2'b01;  
 
+    //! 定义编码器AB项组合当前状态
+    logic   [1:0]	phase;
+    //! 定义编码器AB项组合延迟1个周期
+    logic   [1:0]	phase_d1;
+    //! 定义编码器AB项组合延迟2个周期
+    logic   [1:0]	phase_d2;
 
+    assign  phase   =   {i_encoder_a,i_encoder_b};  
 
-wire [3:0]segment_byte_control;
-assign segment_byte_control=status==status_show_time?4'b1111:status==status_show_minute?4'b0011:status==status_show_hour?4'b1100:status==status_show_day?4'b0011:status==status_show_month?4'b1100:0;
-segment_show segment_show1(.clock(clock),.reset(reset),.data_show(data_show),.segment(uo_out[6:0]),.byte_status(clock_counter[5:3]),.bytee(uio_out[3:0]),.segment_byte_control(segment_byte_control));
-wire[11:0]data_show;
-assign data_show=status==status_show_time?(ui_in[1]==1?{1'd0,hour,minute}:{2'd0,month,1'd0,day[4:0]}):status==status_show_minute?{6'd0,minute}:status==status_show_hour?{1'd0,hour,6'd0}:status==status_show_day?{6'd0,1'd0,day[4:0]}:status==status_show_month?{2'd0,month,6'd0}:0;
-assign uio_out[7:4]=data_show[3:0];
-assign uio_oe[7:0]=8'hff;
-wire segment_D56;
-assign segment_D56=(status==status_show_time)&&clock_counter[13]&&(ui_in[1]==1'd1);
-assign uo_out[7]=segment_D56;
-	
+    //! 寄存两个周期的组合情况，根据前两个周期的组合情况来判断当前周期的状态
+    always@(posedge clk)    begin
+        phase_d1 <= phase;
+        phase_d2 <= phase_d1;
+    end
+
+/*********************************************************************************************************/
+/**************************************正交频率使能，编码器状态判断******************************************/
+/*********************************************************************************************************/
+    //! 定义正交频率模式下的正向(前进)状态判断
+    logic   orth_step_forward;
+    //! 定义正交频率模式下的反向(后退)状态判断
+    logic   orth_step_back;
+
+    assign  orth_step_forward   =   (phase_d1 == phase1 && phase_d2 == phase0) ||
+							        (phase_d1 == phase2 && phase_d2 == phase1) ||
+							        (phase_d1 == phase3 && phase_d2 == phase2) ||
+							        (phase_d1 == phase0 && phase_d2 == phase3) ;
+    
+    assign	orth_step_back      =   (phase_d1 == phase0 && phase_d2 == phase1) || 
+							        (phase_d1 == phase1 && phase_d2 == phase2) ||
+							        (phase_d1 == phase2 && phase_d2 == phase3) ||
+							        (phase_d1 == phase3 && phase_d2 == phase0) ;
+					   						
+
+/*********************************************************************************************************/
+/*************************************非正交频率使能，编码器状态判断*****************************************/
+/*********************************************************************************************************/
+
+    /*
+    取完整状态中的一个位置的状态作为 一个编码器完整周期 的标识即可，参考此款编码器说明图片
+
+    forward模式下，2个周期前 01 ，1个周期前 00 ，当前周期(10)时出判定信号
+    back模式下，2个周期前 00 ，1个周期前 01 ，当前周期(11)时出判定信号
+
+    此信号的产生不依赖于一个完整的编码器周期,只要满足此状态即可产生
+    */
+
+    //! 定义非正交频率模式(普通模式)下的正向(前进)状态判断
+    logic   per_step_forward;
+    //! 定义非正交频率模式(普通模式)下的反向(后退)状态判断
+    logic   per_step_back;
+
+    assign  per_step_forward    = (phase_d1 == phase0 && phase_d2 == phase3) ;
+    assign  per_step_back       = (phase_d1 == phase3 && phase_d2 == phase0) ; 						 
+
+/*********************************************************************************************************/
+/********************************************** 输出 *****************************************************/
+/*********************************************************************************************************/
+
+    //! 正向(前进)信号，延迟1周期，优化时序
+    logic   step_forward;
+    //! 反向(后退)信号，延迟1周期，优化时序
+    logic   step_back;
+
+    // 普通模式和正交模式的选择，正向(前进)
+    assign  step_forward    = i_orthogonal_en ? orth_step_forward	: per_step_forward;
+    // 普通模式和正交模式的选择，反向(后退)
+    assign	step_back       = i_orthogonal_en ? orth_step_back	    : per_step_back;
+
+    //! 对信号进行寄存，优化时序
+    always@(posedge clk)    begin
+        o_step_forward    <= step_forward;
+        o_step_back       <= step_back;
+    end
+
 endmodule
-/* verilator lint_on UNUSEDSIGNAL */

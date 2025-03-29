@@ -16,13 +16,8 @@ module tb ();
   // Wire up the inputs and outputs:
   reg clk;
   reg rst_n;
-  reg ena;
-  reg [7:0] ui_in;
-  reg [7:0] uio_in;
-  wire [7:0] uo_out;
-  wire [7:0] uio_out;
-  wire [7:0] uio_oe;
-
+  reg i_encoder_a,i_encoder_b,i_orthogonal_en;
+  wire o_step_forward,o_step_back;
   // Replace tt_um_example with your module name:
   tt_um_ender_clock user_project (
 
@@ -31,15 +26,23 @@ module tb ();
       .VPWR(1'b1),
       .VGND(1'b0),
 `endif
+    //! 时钟
+    .clk(clk),
+    //! 复位(高有效)
+    .rstp(rst_n),
 
-      .ui_in  (ui_in),    // Dedicated inputs
-      .uo_out (uo_out),   // Dedicated outputs
-      .uio_in (uio_in),   // IOs: Input path
-      .uio_out(uio_out),  // IOs: Output path
-      .uio_oe (uio_oe),   // IOs: Enable path (active high: 0=input, 1=output)
-      .ena    (ena),      // enable - goes high when design is selected
-      .clk    (clk),      // clock
-      .rst_n  (rst_n)     // not reset
+    //! 编码器输入源A
+    .i_encoder_a(i_encoder_a),
+    //! 编码器输入源B
+    .i_encoder_b(i_encoder_b),
+    //! 正交频率使能(正交频率是信号频率的4倍)，参数配置
+   .i_orthogonal_en(i_orthogonal_en),
+
+
+    //! 正向(前进)信号
+    .o_step_forward(o_step_forward),
+    //! 反向(后退)信号
+    .o_step_back(o_step_back)
   );
 
 endmodule
