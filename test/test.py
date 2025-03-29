@@ -21,15 +21,38 @@ async def test_project(dut):
     #结束复位
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value=0;
+    # 后向移动
     for i in range(10):
+        #两个脉冲后产生脉冲信号
         dut.i_encoder_a.value=1-dut.i_encoder_a.value;
         await ClockCycles(dut.clk, 3)
         assert dut.o_step_back.value == 1
+        # 只产生一个时钟的信号，下一个时钟已经为低
+        await ClockCycles(dut.clk, 1)
+        assert dut.o_step_back.value == 0
+        #两个脉冲后产生脉冲信号
         dut.i_encoder_b.value=1-dut.i_encoder_b.value;
         await ClockCycles(dut.clk, 3)
         assert dut.o_step_back.value == 1
-        await ClockCycles(dut.clk, 2)
-
+        # 只产生一个时钟的信号，下一个时钟已经为低
+        await ClockCycles(dut.clk, 1)
+        assert dut.o_step_back.value == 0
+    # 前向移动
+    for i in range(10):
+        #两个脉冲后产生脉冲信号
+        dut.i_encoder_b.value=1-dut.i_encoder_b.value;
+        await ClockCycles(dut.clk, 3)
+        assert dut.o_step_forward.value == 1
+        # 只产生一个时钟的信号，下一个时钟已经为低
+        await ClockCycles(dut.clk, 1)
+        assert dut.o_steo_step_forwardp_back.value == 0
+        #两个脉冲后产生脉冲信号
+        dut.i_encoder_a.value=1-dut.i_encoder_a.value;
+        await ClockCycles(dut.clk, 3)
+        assert dut.o_step_forward.value == 1
+        # 只产生一个时钟的信号，下一个时钟已经为低
+        await ClockCycles(dut.clk, 1)
+        assert dut.o_steo_step_forwardp_back.value == 0
     # # Reset
     # dut._log.info("Reset")
     # dut.ena.value = 1
