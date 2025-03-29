@@ -12,8 +12,18 @@ async def test_project(dut):
 
     # Set the clock period to 10 us (100 KHz)
     clock = Clock(dut.clk, 10, units="us")
+    #初始化信号
+    dut.rst_n.value=1;
+    dut.i_encoder_a=0;
+    dut.i_encoder_b=1;
     cocotb.start_soon(clock.start())
-
+    #结束复位
+    await ClockCycles(dut.clk, 10)
+    dut.rst_n.value=0;
+    for i in range(10):
+        dut.i_encoder_a=1-dut.i_encoder_a;
+        dut.i_encoder_b=1-dut.i_encoder_i_encoder_b;
+        await ClockCycles(dut.clk, 1)
     # # Reset
     # dut._log.info("Reset")
     # dut.ena.value = 1
