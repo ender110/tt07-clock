@@ -57,14 +57,14 @@ async def test_project(dut):
     #后向移动,产生一个脉冲
     dut.i_encoder_a.value=1-dut.i_encoder_a.value;
     await ClockCycles(dut.clk, 3)
-    assert dut.o_step_forward.value == 1
+    assert dut.o_step_back.value == 1
     # 只产生一个时钟的信号，下一个时钟已经为低
     await ClockCycles(dut.clk, 1)
-    assert dut.o_step_forward.value == 0
+    assert dut.o_step_back.value == 0
     #同一信号抖动不应该产生脉冲
     for i in range(10):
             dut.i_encoder_a.value=1-dut.i_encoder_a.value;
-            for i in range(1):
+            for i in range(5):
                 await ClockCycles(dut.clk, 1)
                 # assert dut.o_step_forward.value == 0
                 # assert dut.o_step_back.value == 0
